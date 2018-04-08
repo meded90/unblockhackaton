@@ -25,6 +25,11 @@ export default class Configurator extends React.Component<IConfiguratorProps> {
     return <Card>
       <Form store={ this.props.configurator }>
         <Row gutter={20}>
+          <Col span={12}>
+            <Input name="addressWAVS" label="Address WAVES for identification"/>
+          </Col>
+        </Row>
+        <Row gutter={20}>
           <Col span={6}>
             <Input name="costElectrics" label="Cost electrics" addonAfter="$/kWh"/>
           </Col>

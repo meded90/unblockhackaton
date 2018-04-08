@@ -54,17 +54,17 @@ export default class WebSocket {
     // })
   }
 
-  startManing(id) {
+  startManing(id,cb) {
     this.socket.emit('start', id, function (data) {
       console.log('!!!! data \n', data, '\n !!!!');
-      debugger;
+      cb && cb()
     });
   }
 
-  stopManing(id) {
+  stopManing(id,cb) {
     this.socket.emit('stop', id, function (data) {
       console.log('!!!! data \n', data, '\n !!!!');
-      debugger;
+      cb && cb()
     });
   }
 

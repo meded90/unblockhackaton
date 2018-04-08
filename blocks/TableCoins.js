@@ -5,6 +5,7 @@ import ConfiguratorStore, { ICoinItem } from "../store/ConfiguratorStore";
 import { Button, Table } from "antd";
 import { ColumnProps } from "antd/lib/table/interface";
 import { toJS } from "mobx";
+import { observable } from "mobx/lib/mobx";
 
 interface ITableCoinsProps {
   configurator: ConfiguratorStore
@@ -62,21 +63,43 @@ class Difficulty extends React.Component<IProfitProps> {
     return <div>
       { dataSource.difficulty || '–' } <br/>
       { dataSource.net_hash || '–' } Mh/s <br/>
-      Miners: { dataSource.count_miners || '–' }
+      Miners: { dataSource.count_miners || configurator.selfMining === coin.id ? 1 : 0 || '–' }
     </div>
   }
 }
 
 
-@inject('configurator')
+@inject('configurator', 'ws')
 @observer
-class Action extends React.Component<IProfitProps> {
+class Action extends React.Component<IProfitProps & { ws: WebSocket }> {
+  @observable isLoad =false;
   render() {
-    let { configurator, coin } = this.props;
+    let { configurator, coin, ws } = this.props;
 
     return <div>
-      <Button onClick={configurator.start()} type={'danger'}>Stop</Button>
-      <Button>Start</Button>
+      <Button
+        onClick={ () => {
+          this.isLoad =true;
+          ws.stopManing(coin.id,()=>{
+          this.isLoad =false;
+            configurator.selfMining = '';
+          });
+        } }
+        loading={this.isLoad}
+        disabled={ configurator.selfMining !== coin.id }
+        type={ 'danger' }>Stop</Button>
+      <Button
+        loading={this.isLoad }
+        onClick={ () => {
+          this.isLoad =true;
+          ws.startManing(coin.id,()=>{
+          this.isLoad =false;
+            configurator.selfMining = coin.id;
+          });
+        } }
+        disabled={ configurator.selfMining === coin.id }
+
+      >Start</Button>
     </div>
   }
 }

@@ -66,6 +66,7 @@ export default class ConfigurateStore {
   @observable power = 1000;
   @observable other = 1;
   @observable addressWAVS = '';
+  @observable selfMining = '';
 
   @computed
   get costDey() {
