@@ -80,7 +80,7 @@ export default class Counter extends React.Component<Props, any> {
               </Content>
 
               <Footer style={ { textAlign: 'center' } }>
-                mother's meiner ©2018 Created by LATOKEN Team
+                Mommy's Mainers ©2018 Created by LATOKEN Team
               </Footer>
             </Layout>
           </LocaleProvider>

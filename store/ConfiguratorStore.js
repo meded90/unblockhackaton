@@ -29,6 +29,7 @@ export interface ICoinItem {
 export default class ConfigurateStore {
   constructor(isServer, stores) {
     this.isServer = isServer
+    this.stores = stores
   }
 
   defaultCoin = {
@@ -96,6 +97,7 @@ export default class ConfigurateStore {
   getCoinsByID(id) {
     return _.find(this.list, (item: ICoinItem) => item.id === id);
   }
+
   getProfit(id) {
     const coin =this.getCoinsByID(id)
 
@@ -162,7 +164,6 @@ export default class ConfigurateStore {
       .then(this.fetchCoinsSuccess)
       .catch(this.fetchCoinsError);
   }
-
 
   fetchCoinsSuccess = (data: ICoinItem): Promise<void> => {
     this.listStatus = 'success';

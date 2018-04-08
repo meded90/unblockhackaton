@@ -21,10 +21,6 @@ export default class Configurator extends React.Component<IConfiguratorProps> {
   componentDidMount(){
     this.props.global.start();
   }
-  handlerOnClick = ()=>{
-    this.props.ws.testGet()
-
-  }
   render() {
     return <Card>
       <Form store={ this.props.configurator }>

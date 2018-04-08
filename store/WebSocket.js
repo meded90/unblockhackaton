@@ -11,25 +11,33 @@ export default class WebSocket {
 
   listen() {
     if (!this.isConnect && !this.socket) {
-      this.socket = io('80.93.177.136:80'
-        // , {
-        // transports: ['websocket'],
-        // }
-      );
+      this.socket = io('80.93.177.136:80');
 
-      this.socket.on('connect', function () {
-        console.log('connect');
-        this.isConnect = true;
-      });
 
-      this.socket.on('event', function (data) {
+      this.subscribe('message', (data) => {
+        console.log('!!!! data \n', data, '\n !!!!');
+      })
+
+      this.socket.on('event', (data) => {
         console.log('event', data);
       });
-      this.socket.on('disconnect', function () {
+
+      this.socket.on('connect', () => {
+        console.log('connect');
+        this.isConnect = true;
+        this.startManing('1')
+        setTimeout(() => {
+          this.stopManing('1')
+        }, 1000)
+      });
+
+
+      this.socket.on('disconnect', () => {
         console.log('disconnect');
         this.isConnect = false;
       });
-      this.socket.on('message', function () {
+
+      this.socket.on('message', () => {
         console.log('message');
         console.log('event', data);
       });
@@ -39,12 +47,25 @@ export default class WebSocket {
   }
 
   testGet() {
-    this.listen()
-    this.socket.send('hi world');
-    this.socket.emit('message', 'world');
+    this.listen();
+    this.socket.emit('start', '1');
     // fetch('http://80.93.177.136/api/v1.0/blockchains').then((data)=>{
     //   console.log(data);
     // })
+  }
+
+  startManing(id) {
+    this.socket.emit('start', id, function (data) {
+      console.log('!!!! data \n', data, '\n !!!!');
+      debugger;
+    });
+  }
+
+  stopManing(id) {
+    this.socket.emit('stop', id, function (data) {
+      console.log('!!!! data \n', data, '\n !!!!');
+      debugger;
+    });
   }
 
   subscribe(evtName, handler) {

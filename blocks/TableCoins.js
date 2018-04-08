@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import ConfiguratorStore, { ICoinItem } from "../store/ConfiguratorStore";
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import { ColumnProps } from "antd/lib/table/interface";
 import { toJS } from "mobx";
 
@@ -63,6 +63,20 @@ class Difficulty extends React.Component<IProfitProps> {
       { dataSource.difficulty || '–' } <br/>
       { dataSource.net_hash || '–' } Mh/s <br/>
       Miners: { dataSource.count_miners || '–' }
+    </div>
+  }
+}
+
+
+@inject('configurator')
+@observer
+class Action extends React.Component<IProfitProps> {
+  render() {
+    let { configurator, coin } = this.props;
+
+    return <div>
+      <Button onClick={configurator.start()} type={'danger'}>Stop</Button>
+      <Button>Start</Button>
     </div>
   }
 }
@@ -153,6 +167,11 @@ export default class TableCoins extends React.Component<ITableCoinsProps> {
       </div>,
       key: 'Profitability',
       render: (text, dataSource: ICoinItem) => (<Profitability coin={ dataSource }/>)
+    },
+    {
+      title: <div>Action</div>,
+      key: 'action',
+      render: (text, dataSource: ICoinItem) => (<Action coin={ dataSource }/>)
     }
   ]
 
@@ -162,9 +181,6 @@ export default class TableCoins extends React.Component<ITableCoinsProps> {
       var obj = this.props.configurator.list[ i ];
       list.push(toJS(obj))
     }
-    // if (this.props.configurator.costDey) {
-    //   console.log('costDey', this.props.configurator.costDey)
-    // }
 
     return <div>
       <Table
